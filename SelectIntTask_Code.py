@@ -1,71 +1,4 @@
 
-"""
-================================================================================================
-
-                             Selective Interrogation Assessment Task
-                                      Template Python Code
-
-================================================================================================
-                                                                
-  Script Author: Amelia Reynolds
-  Created: 08-10-2024 
-  Edited: 04-01-2025
-	  
-  Task Information .............................................................................
-		 
-    This is an editable code for the Selective Interrogation Assessment Task. This task 
-    assesses selective interrogation of information, that is, the information an individual 
-    volitionally accesses from a pool of available information. The task permits computation 
-    indices representing the relative proportions of categories of information selectively 
-    interrogated by each participant.
- 
-  Requirements ..................................................................................
- 
-    Software
-    (1) Python Programming Language
-    (2) The Pygame Library
-    
-    Files
-    (1) SelectiveIntTask_Code.py
-    (2) SelectIntTask_Stimuli.csv
-    (2) SelectIntTask_Instructions.txt
-    
-    Please ensure all files are saved in the same location.   
-  
-  Task Citation ..................................................................................
- 
-    Reynolds, A., MacLeod, C., & Grafton, B. (2024). The role of expectancies and selective
-    interrogation of information in trait anxiety-linked affect when approaching potentially
-    stressful future events. Behaviour Research and Therapy.
-    doi.org/10.1016/j.brat.2024.104568 
-  
-  MIT License .................................................................................... 
-  
-    Copyright (c) 2024 Amelia Reynolds
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-    software and associated documentation files (the "Software"), to deal in the Software
-    without restriction, including without limitation the rights to use, copy, modify, merge,
-    publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons 
-    to whom the Software is furnished to do so, subject to the following conditions:
-    
-    The above copyright notice and this permission notice shall be included in all copies or 
-    substantial portions of the Software.
-    
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-    INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-    PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
-    FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
-    OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
-    DEALINGS IN THE SOFTWARE.
-
-  Contact Details ..............................................................................
-		 
-    For additional information, error reporting, and coding assistance, please contact the 
-    author, Amelia Reynolds, via email: arreynolds.research@gmail.com
-"""
-
-
 # Import Packages-------------------------------------
 
 import os
@@ -185,6 +118,7 @@ def wrapText(text, x, y, size, color, bold, wrapwidth):
             offsetLine += size  # move to next line
         # add extra space paragraphs
         offsetLine += size
+    return y + offsetLine
     
 # Event Handling-------------------------------------
 
@@ -227,7 +161,7 @@ def createStim(path): # function to generate Label & Content stimuli
     categoryCount = {} 
     subsetTotal = 16
     try: # read in stimuli from csv
-        with open(path, mode='r') as file:
+        with open(path, mode='r', encoding='utf-8') as file:
             reader = csv.reader(file)
             next(reader)
             for row in reader:
@@ -287,8 +221,8 @@ def runIntro(): # function to run task introduction screen(s)
     global promptText, button
     win.fill(white)
     drawText(promptText['Instructions_Title'],0.5,0.15,0.04,black,True)
-    wrapText(promptText['Instructions_Body'],0.5,0.25,0.03,black,False,0.75)
-    button = drawButton(promptText['Start_Button'],0.5,0.8,0.03,white,True,green)
+    endText = wrapText(promptText['Instructions_Body'],0.5,0.2,0.03,black,False,0.75)
+    button = drawButton(promptText['Start_Button'],0.5,endText+0.05,0.03,white,True,green)
     pygame.display.update()
 
 def runAlert(text, duration): # function to display alert message
@@ -317,8 +251,8 @@ def runGrid(): # function to display grid screen
 def runContent(): # function to display selected content
     global taskInfo, promptText, button
     win.fill(white)
-    drawText(taskInfo['activeContent'],0.5,0.45,0.03,black,False)
-    button = drawButton(promptText['Continue_Button'],0.5,0.8,0.025,white,True,blue)
+    endText=wrapText(taskInfo['activeContent'],0.5,0.4,0.03,black,False,0.75)
+    button = drawButton(promptText['Continue_Button'],0.5,endText+0.02,0.025,white,True,blue)
     pygame.display.update()
 
 def runEnd(): # function to run task end screen
@@ -508,4 +442,3 @@ while running: # main loop
 
 dataDat(datFile) # output summary data
 pygame.quit() # quit pygame
-
